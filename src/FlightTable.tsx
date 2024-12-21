@@ -3,6 +3,7 @@ import {Button} from "./components/Button";
 import {AddNewItem} from "./components/AddNewItem";
 import {UpdateItem} from "./components/UpdateItem";
 import styles from './Styles.module.css'
+import {Routes} from "./Routes";
 
 export type RouteType = {
     id: string;
@@ -15,7 +16,7 @@ export type FlightProps = {
     date: string;
     flightTableID: string;
     routes: RouteType[];
-    toggleFTIsBooked: (flightID: string, routeID: string) => void;
+    toggleFTIsBooked: (flightID: string, routeID: string, isBooked:boolean) => void;
     removeFT: (flightID: string) => void;
     updateFTDate: (flightID: string, newDate: string) => void;
     updateFTRoutesFrom: (flightID: string, routeID: string, newFrom: string) => void;
@@ -38,18 +39,6 @@ export const FlightTable = ({
                             }: FlightProps) => {
 
 
-    const mappedRoutes = routes.map((route) => (
-        <Route
-            key={route.id}
-            route={route}
-            toggleFTIsBooked={toggleFTIsBooked}
-            flightTableID={flightTableID}
-            updateFTRoutesFrom={updateFTRoutesFrom}
-            updateFTRoutesTo={updateFTRoutesTo}
-            removeFTRoute={removeFTRoute}
-        />
-    ));
-
     const addNewFTRouteHandler = (from: string, to: string) => {
         addNewFTRoute(flightTableID, from, to)
     }
@@ -66,7 +55,7 @@ export const FlightTable = ({
             <Button title="Remove FlightTable" onClick={removeFlightTableHandler}/>
             <h2 className={styles.headerFT}>FlightTable ID: </h2>
             <h2 className={styles.dateHeader}>
-                Date: <UpdateItem oldTitle={date} callBack={()=>'updateFTDateHandler'}/>
+                Date: <UpdateItem oldTitle={date} callBack={updateFTDateHandler}/>
             </h2>
             <div className={styles.addNewRouteContainer}>
                 <AddNewItem
@@ -75,7 +64,16 @@ export const FlightTable = ({
                     title={"Add New Route"}
                 />
             </div>
-            {mappedRoutes}
+            <div>
+                <Routes routes={routes}
+                        toggleFTIsBooked={toggleFTIsBooked}
+                        flightTableID={flightTableID}
+                        updateFTRoutesFrom={updateFTRoutesFrom}
+                        updateFTRoutesTo={updateFTRoutesTo}
+                        removeFTRoute={removeFTRoute}
+                />
+            </div>
+
         </div>
     );
 };
